@@ -20,7 +20,7 @@ echo '          <table nowrap align=center>'
 echo '              <tr>'
 echo '                  <td>Username</td>'
 
-if [ $error = "KO_wrong" ]; then
+if [ ! -z $error ] && [ $error = "KO_wrong" ]; then
     echo "                  <td><input type=\"text\" name=\"username\" value=\"$username\" size=\"20\"></td>"
 else
     echo '                  <td><input type="text" name="username" size="20"></td>'
@@ -32,7 +32,7 @@ echo '              </tr>'
 echo '              <tr>'
 echo '                  <td>Password</td>'
 
-if [ $error = "KO_wrong" ]; then
+if [ ! -z $error ] && [ $error = "KO_wrong" ]; then
     echo "                  <td><input type=\"text\" name=\"password\" value=\"$password\" size=\"20\"></td>"
 else
     echo '                  <td><input type="text" name="password" size="20"></td>'
