@@ -1,18 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-<title> P`agina Web d’ADS </title> </head>
-<body>
-<h3>Plana web que envia dades</h3> <br/>
-<h4>Me`tode GET</h4>
-<form action="/cgi-bin/gestionProcesos.sh" method="get"
-ENCTYPE="text/plain">
-Para`metre: <input type="text" name="parametreGET" size="20"
-                    value="entra dades">
-        <br/>
-        <input type="submit" value="submit">
-        <input type="reset" value="reset">
+        <title> Loading </title> 
+    </head>
+    <body>
+        <form name="charge" id="myForm" target="_myFrame" action="/cgi-bin/login-view.sh" method="GET" ENCTYPE="text/plain">
         </form>
+        <script type="text/javascript">
+            document.charge.submit();
+        </script>
     </body>
 </html>

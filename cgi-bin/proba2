@@ -1,0 +1,46 @@
+#!/bin/bash
+
+echo "Content-type: text/html"
+echo ""
+
+echo '<html>'
+echo '<head>'
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+echo '<title>Sign In</title>'
+echo '</head>'
+echo '<body>'
+
+  echo "<form method=GET action=\"${SCRIPT}\">"\
+       '<table nowrap align=center>'\
+          '<tr><td>Username</TD><TD><input type="text" name="user" size=12></td></tr>'\
+          '<tr><td>Password</td><td><input type="text" name="pass" size=12 value=""></td>'\
+          '</tr></table>'
+
+  echo '<br><div align=center><input type="submit" value="Sign in"></div>'\
+
+  # Make sure we have been invoked properly.
+
+  if [ "$REQUEST_METHOD" != "GET" ]; then
+        echo "<hr>Script Error:"\
+             "<br>Usage error, cannot complete request, REQUEST_METHOD!=GET."\
+             "<br>Check your FORM declaration and be sure to use METHOD=\"GET\".<hr>"
+        exit 1
+  fi
+
+  # If no search arguments, exit gracefully now.
+
+  if [ -z "$QUERY_STRING" ]; then
+        exit 0
+  else
+     # No looping this time, just extract the data you are looking for with sed:
+     XX=`echo "$QUERY_STRING" | sed -n 's/^.*user=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
+     YY=`echo "$QUERY_STRING" | sed -n 's/^.*pass=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
+     echo "val_x: " $XX
+     echo '<br>'
+     echo "val_y: " $YY
+  fi
+echo '</body>'
+echo '</html>'
+
+exit 0
+
