@@ -30,6 +30,7 @@ echo -e "<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"
 
                </style>
          </head>
+
 <body>
 "
 echo -e "<h2>Gestion de procesos</h2>"
@@ -46,7 +47,7 @@ echo -e "<div class=container>"
 echo -e "<table>
   <tr>
     <th>PID - USER</th>
-    
+
   </tr>
   "
   for i in $v
@@ -60,20 +61,40 @@ echo -e "<table>
   done
 
 echo -e "</table>"
-echo -e "<div> QUE TAL"
+echo -e "<div> <h4>Introduzca un PID y seleccione lo que desea hacer<h4/>"
+echo -e "<form action="/cgi-bin/gestionProcesos2.sh" method="post" ENCTYPE="text/plain">
+  PID <input type="text" name="username" size="20">
+
+<select name="OS" id='options' onchange='myFunc()'>
+   <option value="1">Consultar Estado</option>
+   <option id="val2" value="2">Interrumpir</option>
+   <option value="3">Eliminar Proceso</option>
+</select>
+ <input id='segs' type='text' name="segs" value="segundos" hidden='true' size="7">
+
+        <input type="submit" value="Log In">
+        <input type="reset" value="reset">
+        </form>"
+echo -e " </div>"
 echo -e "</div>"
-echo -e "</div>"
-
-
-
-
-
 
 
 echo -e "</div>"
 
 echo -e "
+<script>
+function myFunc(){
+ if(document.getElementById('options'). value == '2') {
+   document.getElementById('segs').hidden = false;
+ } else {
+   document.getElementById('segs').hidden = true;
+ }
+}
 
-         </body>
+function realizadoConExito(){
+ alert('Proceso realizado con exito');
+  </script>
+        </body>
+
 </html>
 "
