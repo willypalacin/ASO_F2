@@ -14,7 +14,7 @@ password=$(echo $password | awk -F = {'print $2'} | sed 's/\r$//')
 
 if [ -z $username ] || [ -z $password ]
 then
-        echo '      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+    echo '      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
     echo '  </head>'
     echo '  <body>'
     echo '      <form name="loginError" id="myForm" target="_myFrame" action="/cgi-bin/login-view.sh" method="POST">'
@@ -75,10 +75,13 @@ if [ $shadow_pass != $password_encrypted ]; then
     exit 0
 fi
 
-echo "      <meta http-equiv='refresh' content='0; URL=http://192.168.1.49/menu.html'>"
-echo '  </head>'
-echo '  <body>'
-echo '  </body>'
-echo '</html>'
-
-exit 0
+    echo '      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+    echo '  </head>'
+    echo '  <body>'
+    echo '      <form name="goMenu" id="myForm" target="_myFrame" action="/menu.html" method="GET">'
+    echo '      </form>'
+    echo '      <script type="text/javascript">'
+    echo '          document.goMenu.submit();'
+    echo '      </script>'
+    echo '  </body>'
+    echo '</html>'
