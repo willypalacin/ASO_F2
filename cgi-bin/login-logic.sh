@@ -75,13 +75,18 @@ if [ $shadow_pass != $password_encrypted ]; then
     exit 0
 fi
 
-    echo '      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-    echo '  </head>'
-    echo '  <body>'
-    echo '      <form name="goMenu" id="myForm" target="_myFrame" action="/menu.html" method="GET">'
-    echo '      </form>'
-    echo '      <script type="text/javascript">'
-    echo '          document.goMenu.submit();'
-    echo '      </script>'
-    echo '  </body>'
-    echo '</html>'
+hash=$(echo -n "$username $password" |openssl enc -e -aes-256-cbc -a -k "ILOVU")
+
+echo '      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+echo '      <script>'
+echo "          document.cookie = \"credentials=$hash\";"
+echo '      </script>'
+echo '  </head>'
+echo '  <body>'
+echo '      <form name="goMenu" id="myForm" target="_myFrame" action="/cgi-bin/menu.sh" method="GET">'
+echo '      </form>'
+echo '      <script type="text/javascript">'
+echo '          document.goMenu.submit();'
+echo '      </script>'
+echo '  </body>'
+echo '</html>'
