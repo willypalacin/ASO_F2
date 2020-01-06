@@ -28,8 +28,6 @@ then
     echo '  </body>'
     echo '</html>'
     exit 0
-
-exit 0
 fi
 
 #Comparar user i pass amb shadow
