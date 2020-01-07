@@ -33,9 +33,9 @@ echo '              <tr>'
 echo '                  <td>Password</td>'
 
 if [ ! -z $error ] && [ $error = "KO_wrong" ]; then
-    echo "                  <td><input type=\"text\" name=\"password\" value=\"$password\" size=\"20\"></td>"
+    echo "                  <td><input type=\"password\" name=\"password\" value=\"$password\" size=\"20\"></td>"
 else
-    echo '                  <td><input type="text" name="password" size="20"></td>'
+    echo '                  <td><input type="password" name="password" size="20"></td>'
 fi
 
 echo '              </tr>'
