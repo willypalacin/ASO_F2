@@ -57,7 +57,7 @@ done
 
 if [ $shadow_pass != $password_encrypted ]; then
     echo '      <form name="NOLogged" id="myForm" target="_myFrame" action="/index.html" method="GET" ENCTYPE="text/plain">'
-    echo '          <div align=center><input type="submit" value="Tornar Menu"></div>'
+    echo '          <div align=center><input type="hidden" value="Tornar Menu"></div>'
     echo '      </form>'
     echo '      <script type="text/javascript">'
     echo '          document.NOLogged.submit();'
