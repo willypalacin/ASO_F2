@@ -48,7 +48,7 @@ done
 
 if [ $shadow_pass != $password_encrypted ]; then
     echo '      <form name="NOLogged" id="myForm" target="_myFrame" action="/index.html" method="GET" ENCTYPE="text/plain">'
-    echo '          <div align=center><input type="submit" value="Tornar Menu"></div>'
+    echo '          <div align=center><input type="hidden" value="Tornar Menu"></div>'
     echo '      </form>'
     echo '      <script type="text/javascript">'
     echo '          document.NOLogged.submit();'
@@ -72,6 +72,9 @@ echo '            <input type="submit" value="Gestionar Procesos">'
 echo '        </form>'
 echo '        <form action="/cgi-bin/filtrajePaquetes.sh" method="GET" ENCTYPE="text/plain">'
 echo '            <input type="submit" value="Filtraje de paquetes">'
+echo '        </form>'
+echo '        <form action="/cgi-bin/logout.sh" method="GET" ENCTYPE="text/plain">'
+echo '            <input type="submit" value="Logout">'
 echo '        </form>'
 echo '    </body>'
 echo '</html>'
