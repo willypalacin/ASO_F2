@@ -71,15 +71,35 @@ hour=$(echo "$hour" | awk -F = {'print $2'} | sed 's/\r$//')
 minute=$(echo "$minute" | awk -F = {'print $2'} | sed 's/\r$//')
 command=$(echo "$command" | awk -F = {'print $2'} | sed 's/\r$//')
 
+if [ -z "$month" ] || [ -z "$dayMonth" ] || [ -z "$dayWeek" ] || [ -z "$hour" ] || [ -z "$minute" ] || [ -z "$command" ]; then
+    echo '      <form name="redirect" id="myForm" target="_myFrame" action="/cgi-bin/gestioCron.sh" method="POST" ENCTYPE="text/plain">'
+    echo '          <input type="hidden" name="add" value="KO">'
+    echo '          <div align=center><input type="submit" value="Tornar Cron"></div>'
+    echo '      </form>'
+    echo '      <script type="text/javascript">'
+    echo '          document.redirect.submit();'
+    echo '      </script>'
+    echo '  </body>'
+    echo '</html>'
+else
+    sudo fcrontab -u "$username" -l | { cat; echo "$minute $hour $dayMonth $month $dayWeek $command"; } | sudo fcrontab -u "$username" -
+    logger -s "/$username/ ha añadido la tarea de cron siguiente. MES: $month" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+    logger -s "/$username/ ha añadido la tarea de cron siguiente. DIA MES: $dayMonth" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+    logger -s "/$username/ ha añadido la tarea de cron siguiente. DIA SEMANA: $dayWeek" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+    logger -s "/$username/ ha añadido la tarea de cron siguiente. HORA: $hour" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+    logger -s "/$username/ ha añadido la tarea de cron siguiente. MINUTO: $minute" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+    logger -s "/$username/ ha añadido la tarea de cron siguiente. COMANDO: $command" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
 
-sudo fcrontab -u "$username" -l | { cat; echo "$minute $hour $dayMonth $month $dayWeek $command"; } | sudo fcrontab -u "$username" -
 
-echo '      <form name="redirect" id="myForm" target="_myFrame" action="/cgi-bin/gestioCron.sh" method="POST" ENCTYPE="text/plain">'
-echo '          <input type="hidden" name="add" value="OK">'
-echo '          <div align=center><input type="submit" value="Tornar Cron"></div>'
-echo '      </form>'
-echo '      <script type="text/javascript">'
-echo '          document.redirect.submit();'
-echo '      </script>'
-echo '  </body>'
-echo '</html>'
+    echo '      <form name="redirect" id="myForm" target="_myFrame" action="/cgi-bin/gestioCron.sh" method="POST" ENCTYPE="text/plain">'
+    echo '          <input type="hidden" name="add" value="OK">'
+    echo '          <div align=center><input type="submit" value="Tornar Cron"></div>'
+    echo '      </form>'
+    echo '      <script type="text/javascript">'
+    echo '          document.redirect.submit();'
+    echo '      </script>'
+    echo '  </body>'
+    echo '</html>'
+fi
+
+

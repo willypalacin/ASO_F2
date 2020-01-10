@@ -60,7 +60,23 @@ fi
 
 read line       #linia a esborrar
 line=$(echo "$line" | awk -F = {'print $1'} | sed 's/\r$//')
+command=$(sudo fcrontab -u "$username" -l | sed -n "${line}p")
+month=$(echo "$command" | awk {'print $4'})
+dayMonth=$(echo "$command" | awk {'print $3'})
+dayWeek=$(echo "$command" | awk {'print $5'})
+hour=$(echo "$command" | awk {'print $2'})
+minute=$(echo "$command" | awk {'print $1'})
+command=$(echo "$command" | cut -d" " -f6-)
 sudo fcrontab -u "$username" -l | sed "${line}d" | sudo fcrontab -u "$username" -
+
+logger -s "/$username/ ha añadido eliminado la tarea de cron siguiente. MES: $month" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+logger -s "/$username/ ha añadido eliminado la tarea de cron siguiente. DIA MES: $dayMonth" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+logger -s "/$username/ ha añadido eliminado la tarea de cron siguiente. DIA SEMANA: $dayWeek" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+logger -s "/$username/ ha añadido eliminado la tarea de cron siguiente. HORA: $hour" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+logger -s "/$username/ ha añadido eliminado la tarea de cron siguiente. MINUTO: $minute" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+logger -s "/$username/ ha añadido eliminado la tarea de cron siguiente. COMANDO: $command" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+
+
 
 echo '      <form name="redirect" id="myForm" target="_myFrame" action="/cgi-bin/gestioCron.sh" method="POST" ENCTYPE="text/plain">'
 echo '          <input type="hidden" name="del" value="OK">'

@@ -67,6 +67,8 @@ if [ $shadow_pass != $password_encrypted ]; then
     exit 0
 fi
 
+logger -s "/$username/ ha entrado en gestion de tareas" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+
 echo '      <form name="menu" id="myForm" target="_myFrame" action="/cgi-bin/menu.sh" method="GET" ENCTYPE="text/plain">'
 echo '          <div align=center><input type="submit" value="Tornar Menu"></div>'
 echo '      </form>'
@@ -159,7 +161,7 @@ case $operation in
                 echo '<p align=center style="color:rgb(0,255,0);"> Task successfully created </p>'
                 ;;
             *)
-                echo '<p align=center style="color:rgb(255,0,0);"> Error on creating task </p>'
+                echo '<p align=center style="color:rgb(255,0,0);"> Error on creating task. Blank spaces detected! </p>'
                 ;;
         esac
         ;;
