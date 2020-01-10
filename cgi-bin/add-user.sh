@@ -89,8 +89,8 @@ case $error in
         echo '  <body>'
         echo '      <form name="addUserOK" id="myForm" target="_myFrame" action="/cgi-bin/gestioUsuaris.sh" method="POST">'
         echo '          <input type="hidden" name="error" value="OK_createUser" />'
-        echo "          <input type=\"hidden\" name=\"username\" value=\"\" />"
-        echo "          <input type=\"hidden\" name=\"password\" value=\"\" />"
+        echo "          <input type=\"hidden\" name=\"username\" value=\"$username\" />"
+        echo "          <input type=\"hidden\" name=\"password\" value=\"$password\" />"
         echo '      </form>'
         echo '      <script type="text/javascript">'
         echo '          document.addUserOK.submit();'

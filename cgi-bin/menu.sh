@@ -58,6 +58,8 @@ if [ $shadow_pass != $password_encrypted ]; then
     exit 0
 fi
 
+logger -s "/$username/ se encuentra en menu" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+
 echo '        <form action="/cgi-bin/gestioUsuaris.sh" method="GET" ENCTYPE="text/plain">'
 echo '            <input type="submit" value="Gestionar Usuaris">'
 echo '        </form>'
@@ -72,6 +74,12 @@ echo '            <input type="submit" value="Gestionar Procesos">'
 echo '        </form>'
 echo '        <form action="/cgi-bin/filtrajePaquetes.sh" method="GET" ENCTYPE="text/plain">'
 echo '            <input type="submit" value="Filtraje de paquetes">'
+echo '        </form>'
+echo '        <form action="/cgi-bin/funcionalitatsMusicals.sh" method="GET" ENCTYPE="text/plain">'
+echo '            <input type="submit" value="Funcionalitats Musicals">'
+echo '        </form>'
+echo '        <form action="/cgi-bin/syslog.sh" method="GET" ENCTYPE="text/plain">'
+echo '            <input type="submit" value="Syslog">'
 echo '        </form>'
 echo '        <form action="/cgi-bin/logout.sh" method="GET" ENCTYPE="text/plain">'
 echo '            <input type="submit" value="Logout">'

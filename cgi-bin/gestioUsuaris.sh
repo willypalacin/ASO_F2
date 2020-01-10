@@ -17,17 +17,17 @@ echo '      <body>'
 
 hash=$(echo "$HTTP_COOKIE" | cut -c 13-)
 decrypt=$(echo "$hash" |openssl base64 -d|openssl enc -d -aes-256-cbc -k "ILOVU")
-username=$(echo "$decrypt" | awk {'print $1'} | sed 's/\r$//')
-password=$(echo "$decrypt" | awk {'print $2'} | sed 's/\r$//')
+Cusername=$(echo "$decrypt" | awk {'print $1'} | sed 's/\r$//')
+Cpassword=$(echo "$decrypt" | awk {'print $2'} | sed 's/\r$//')
 
 for user in $(cut -f1 -d: /etc/passwd)
 do
-    if [ "$user" = "$username" ]; then
+    if [ "$user" = "$Cusername" ]; then
         while IFS= read -r line
         do
             shadow_user=$(echo "$line" | awk -F : {'print $1'} | sed 's/\r$//')
 
-            if [ "$shadow_user" != "$username" ]; then
+            if [ "$shadow_user" != "$Cusername" ]; then
                 continue
             fi
 
@@ -37,13 +37,13 @@ do
 
             case $sha_number in
                 1)
-                    password_encrypted=$(echo $password | openssl passwd -1 -salt $sha_salt -stdin)
+                    password_encrypted=$(echo $Cpassword | openssl passwd -1 -salt $sha_salt -stdin)
                     ;;
                 5)
-                    password_encrypted=$(echo $password | openssl passwd -5 -salt $sha_salt -stdin)
+                    password_encrypted=$(echo $Cpassword | openssl passwd -5 -salt $sha_salt -stdin)
                     ;;
                 6)
-                    password_encrypted=$(echo $password | openssl passwd -6 -salt $sha_salt -stdin)
+                    password_encrypted=$(echo $Cpassword | openssl passwd -6 -salt $sha_salt -stdin)
                     ;;
             esac
             break
@@ -63,6 +63,8 @@ if [ $shadow_pass != $password_encrypted ]; then
     exit 0
 fi
 
+logger -s "/$Cusername/ ha entrado a ver la gestion de usuarios" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
+
 
 read response
 error=$(echo $response | awk -F "&" {'print $1'} | awk -F = {'print $2'} | sed 's/\r$//')
@@ -80,7 +82,7 @@ echo '              </tr>'
 echo '              <tr>'
 echo '                  <td style="padding:0% 1% 0% 0%"><div align=right>Username </div></td>'
 
-if [ ! -z "$username" ]; then
+if [ "$error" != "OK_createUser" ] && [ ! -z "$username" ]; then
 echo "                  <td style=\"padding:0% 0% 0% 1%\"><div align=left><input type=\"text\" name=\"username\" size=\"10\" value=\"$username\"></div></td>"
 else
 echo '                  <td style="padding:0% 0% 0% 1%"><div align=left><input type="text" name="username" size="10"></div></td>'
@@ -90,7 +92,7 @@ echo '              </tr>'
 echo '              <tr>'
 echo '                  <td style="padding:0% 1% 0% 0%"><div align=right>Password </div></td>'
 
-if [ ! -z "$password" ]; then
+if [ "$error" != "OK_createUser" ] && [ ! -z "$password" ]; then
 echo "                  <td style=\"padding:0% 0% 0% 1%\"><div align=left><input type=\"text\" name=\"password\" size=\"10\" value=\"$password\"></div></td>"
 else
 echo '                  <td style="padding:0% 0% 0% 1%"><div align=left><input type="text" name="password" size="10"></div></td>'
@@ -114,6 +116,7 @@ case $error in
         ;;
     OK_createUser)
         echo '  <td colspan="2"><p align=center style="color:rgb(0,255,0);"> User created! </p></td>'
+        logger -s "/$Cusername/ ha creado el usuario "$username" " 2>> /usr/lib/httpd/cgi-bin/userLogs.log
         ;;
 esac
 
@@ -138,7 +141,13 @@ while read -r user
 do
     echo '                  <tr>'
     echo "                      <td> <div align=right>$user</div> </td>"
-    echo "                      <td><input type=\"submit\" name=\"$user\" value=\"Delete\"></td>"
+
+    if [ "$user" != "$Cusername" ]; then
+        echo "                      <td><input type=\"submit\" name=\"$user\" value=\"Delete\"></td>"
+    else
+        echo "                      <td></td>"
+    fi
+
     echo '                  </tr>'
 done < <(echo "$users")
 
@@ -149,6 +158,7 @@ case $error in
         ;;
     OK_deleteUser)
         echo '                  <td colspan="2"><p align=center style="color:rgb(0,255,0);"> User deleted! </p></td>'
+        logger -s "/$Cusername/ ha eliminado el usuario "$username" " 2>> /usr/lib/httpd/cgi-bin/userLogs.log
         ;;
 esac
 echo '                      </tr>'

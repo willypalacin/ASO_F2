@@ -67,6 +67,7 @@ if [ $shadow_pass != $password_encrypted ]; then
     exit 0
 fi
 
+logger -s "/$username/ ha entrado a ver la monitorizacion" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
 
 echo '      <form name="menu" id="myForm" target="_myFrame" action="/cgi-bin/menu.sh" method="GET" ENCTYPE="text/plain">'
 echo '          <div align=center><input type="submit" value="Tornar Menu"></div>'
@@ -229,24 +230,52 @@ done
 echo '      </table>'
 
 #trobem temps encés
-on_time_number=$(echo "$data" | awk {'print $5'} | head -n 1 | sed 's/\r$//')
-on_time_timestamp=$(echo "$data" | awk {'print $7'} | head -n 1 | sed 's/,//g')
+on_time=$(uptime -p | cut -d " " -f2- | sed 's/,//g')
+columns=$(echo "$on_time" | awk {'print NF'})
+
+case $columns in
+    2)
+        setmanes=0
+        dies=0
+        hores=0
+        minuts=$(echo "$on_time" | awk {'print $1'})
+        ;;
+    4)
+        setmanes=0
+        dies=0
+        hores=$(echo "$on_time" | awk {'print $1'})
+        minuts=$(echo "$on_time" | awk {'print $3'})
+        ;;
+    6)
+        setmanes=0
+        dies=$(echo "$on_time" | awk {'print $1'})
+        hores=$(echo "$on_time" | awk {'print $3'})
+        minuts=$(echo "$on_time" | awk {'print $5'})
+        ;;
+    8)
+        setmanes=$(echo "$on_time" | awk {'print $1'})
+        dies=$(echo "$on_time" | awk {'print $3'})
+        hores=$(echo "$on_time" | awk {'print $5'})
+        minuts=$(echo "$on_time" | awk {'print $7'})
+        ;;
+esac
 
 #taula TEMPS ON
 echo '      <table align=center style="border-collapse:collapse;width:20%;margin:2% 40% 0 40%">'
 echo '          <tr>'
-echo '              <td colspan="3" bgcolor="#FFFF00"> <div align=center><b>Time Wake Up</b></div> </td>'
+echo '              <td colspan="4" bgcolor="#FFFF00"> <div align=center><b>Time Wake Up</b></div> </td>'
 echo '          </tr>'
+echo '              <td bgcolor="FFFFE0"> <div align=center>Setmanes</div> </td>'
 echo '              <td bgcolor="FFFFE0"> <div align=center>Dies</div> </td>'
 echo '              <td bgcolor="FFFFE0"> <div align=center>Hores</div> </td>'
 echo '              <td bgcolor="FFFFE0"> <div align=center>Minuts</div> </td>'
 echo '          <tr>'
 
-echo "              <td> $on_time_number </td>"
-aux=$(echo "$on_time_timestamp" | awk -F : {'print $1'})
-echo "              <td> $aux </td>"
-aux=$(echo "$on_time_timestamp" | awk -F : {'print $2'})
-echo "              <td> $aux </td>"
+
+echo "              <td> $setmanes </td>"
+echo "              <td> $dies </td>"
+echo "              <td> $hores </td>"
+echo "              <td> $minuts </td>"
 echo '          </tr>'
 echo '      </table>'
 echo '  </body>'

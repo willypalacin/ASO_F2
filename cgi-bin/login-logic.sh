@@ -76,6 +76,7 @@ if [ $shadow_pass != $password_encrypted ]; then
 fi
 
 hash=$(echo -n "$username $password" |openssl enc -e -aes-256-cbc -a -k "ILOVU")
+logger -s "/$username/ se ha logueado" 2>> /usr/lib/httpd/cgi-bin/userLogs.log
 
 echo '      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
 echo '      <script>'
